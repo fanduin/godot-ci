@@ -3,11 +3,13 @@ on: push
 
 env:
   GODOT_VERSION: 3.3.4
-  EXPORT_NAME: test-project
+  EXPORT_NAME: godot-ci-test
 
 jobs:
   export-windows:
     name: Windows Export
+    branches:
+      - 'releases/**'
     runs-on: ubuntu-latest
     container:
       image: barichello/godot-ci:3.3.4
@@ -33,6 +35,8 @@ jobs:
 
   export-linux:
     name: Linux Export
+    branches:
+      - 'releases/**'
     runs-on: ubuntu-latest
     container:
       image: barichello/godot-ci:3.3.4
@@ -59,6 +63,8 @@ jobs:
   export-web:
     name: Web Export
     runs-on: ubuntu-latest
+    branches:
+      - 'releases/**'
     container:
       image: barichello/godot-ci:3.3.4
     steps:
@@ -80,19 +86,11 @@ jobs:
         with:
           name: web
           path: build/web
-      # Installing rsync is needed in order to deploy to GitHub Pages. Without it, the build will fail.
-      - name: Install rsync 📚
-        run: |
-          apt-get update && apt-get install -y rsync
-      - name: Deploy to GitHub Pages 🚀
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages # The branch the action should deploy to.
-          FOLDER: build/web # The folder the action should deploy.
 
   export-mac:
     name: Mac Export
+    branches:
+      - 'releases/**'
     runs-on: ubuntu-latest
     container:
       image: barichello/godot-ci:3.3.4
